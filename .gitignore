@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+granite-system-backend/node_modules
+granite-system-mobile/node_modules
+
+# Environment variables
+.env
+granite-system-backend/.env
+granite-system-mobile/.env
+
+# Expo folders
+.expo/
+granite-system-backend/.expo/
+granite-system-mobile/.expo/
+
+# uploaded files 
+granite-system-backend/uploads/
+
+# OS generated files
+.DS_Store
+Thumbs.db
