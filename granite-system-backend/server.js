@@ -12,14 +12,10 @@ app.use(cors());
 app.use(express.json()); // Allows us to accept JSON data in the body of requests
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Test Route
-app.get('/', (req, res) => {
-    res.send('Granite System Backend is running!');
-});
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
-/*app.use('/uploads', express.static(path.join(__dirname, '/uploads')));*/
+
 
 
 // Connect to MongoDB
