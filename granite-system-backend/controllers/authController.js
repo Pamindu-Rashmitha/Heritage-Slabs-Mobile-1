@@ -78,9 +78,87 @@ const loginUser = async (req, res) => {
     }
 };
 
+const updateUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId);
 
+        
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+
+        if(req.body.name){
+            user.name = req.body.name;
+        }
+        if(req.body.email){
+            user.email = req.body.email;
+        }
+        if(req.body.password){
+            user.password = req.body.password;
+        }
+
+        const updatedUser = await user.save();
+        res.status(200).json({
+            message:'User updated successfuly!',
+            user:{id:updatedUser.id, name: updatedUser.name, email:updatedUser.email, password: updatedUser.password}
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:'Servor Error'})
+    }
+};
+
+const deleteUser = async (req, res) =>{
+    try {
+        const userId = req.params.id;
+        const deleteduser = await User.findByIdAndDelete(userId);
+
+        if(!deletedUser){
+            return res.status(404).json({message:'User not found'});
+        }
+
+        res.status(200).json({message:'User deleted successfully!'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:'Servor Error'})
+    }
+};
+
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({}).select('-password');
+
+        if(!users){
+            return res.status(404).json({message:'Users not found'});
+        }
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:'Servor Error'});
+    }
+};
+
+const getUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId).select('-password');
+
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:'Servor Error'});
+    }
+};
 
 module.exports = {
     registerUser,
     loginUser,
+    updateUser,
+    deleteUser,
+    getUser,
+    getUsers
 };
