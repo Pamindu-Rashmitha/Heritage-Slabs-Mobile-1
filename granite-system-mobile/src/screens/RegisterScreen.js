@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-    View, 
-    Text, 
-    TextInput, 
-    TouchableOpacity, 
-    StyleSheet, 
-    Alert 
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,19 +26,23 @@ const RegisterScreen = ({ navigation }) => {
             const response = await api.post('/auth/register', { name, email, password });
 
             const token = response.data.token;
-            const role = response.data.role || 'customer'; 
-            
-            // THE SAFETY NET: If the backend didn't send a token, send them to Login
+            const role = response.data.role || 'customer';
+            const userId = response.data._id;
+
+            // If the backend didn't send a token, send them to Login
             if (!token) {
                 Alert.alert('Account Created!', 'Please log in with your new credentials.');
                 navigation.replace('Login');
-                return; // Stop the code here so it doesn't hit AsyncStorage
+                return;
             }
 
             // If token exists, proceed as normal
             await AsyncStorage.setItem('userToken', token);
             await AsyncStorage.setItem('userRole', role);
-            
+            if (userId) {
+                await AsyncStorage.setItem('userId', userId);
+            }
+
             Alert.alert('Success!', `Welcome to the Granite Catalog, ${response.data.name}!`);
             navigation.replace('CustomerCatalog');
 
@@ -83,8 +87,8 @@ const RegisterScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
                 {/* A link to go back to the Login screen if they already have an account */}
-                <TouchableOpacity 
-                    style={styles.linkButton} 
+                <TouchableOpacity
+                    style={styles.linkButton}
                     onPress={() => navigation.navigate('Login')}
                 >
                     <Text style={styles.linkText}>Already have an account? Log In</Text>

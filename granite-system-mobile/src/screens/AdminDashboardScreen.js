@@ -79,6 +79,16 @@ const SECTIONS = [
         bg: '#fdf8e8',
         functional: false,
     },
+    {
+        key: 'users',
+        title: 'Manage Users',
+        subtitle: 'View, edit & remove users',
+        icon: 'account-group-outline',
+        color: '#d62828',
+        bg: '#fceaea',
+        functional: true,
+        route: 'UserManagement',
+    },
 ];
 
 
