@@ -8,8 +8,9 @@ const {
 } = require('../controllers/productController');
 const {protect} = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
+const { productValidation, validate } = require('../middleware/validationMiddleware');
 
-router.route('/').get(getProducts).post(protect, upload.single('image'), createProduct);
-router.route('/:id').put(protect, updateProduct).delete(protect, deleteProduct);
+router.route('/').get(getProducts).post(protect, upload.single('image'), productValidation, validate, createProduct);
+router.route('/:id').put(protect, productValidation, validate, updateProduct).delete(protect, deleteProduct);
 
 module.exports = router;
