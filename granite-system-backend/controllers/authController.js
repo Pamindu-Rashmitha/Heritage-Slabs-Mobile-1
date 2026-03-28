@@ -6,6 +6,23 @@ const registerUser = async (req, res) => {
     try{
         const {name,email,password,role} = req.body;
 
+        if(!name || !email || !password){
+            return res.status(400).json({message:'Please fill in all fields'});
+        }
+
+        if(name.trim().length < 3){
+            return res.status(400).json({message:'Name must be atleast 3 characters'});
+        }
+
+        if(/^\d+$/.test(name.trim())){
+            return res.status(400).json({message:'Name cannot contain only numbers'});
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+            return res.status(400).json({message:'Please include a valid email'});
+        }
+
         // Check user exists
         const userExists = await User.findOne({email});
         if(userExists){
@@ -89,13 +106,24 @@ const updateUser = async (req, res) => {
         }
 
         if(req.body.name){
+            if(/^\d+$/.test(req.body.name.trim())){
+                return res.status(400).json({message:'Name cannot contain only numbers'});
+            }
+            if(req.body.name.trim().length < 3){
+                return res.status(400).json({message:'Name must be atleast 3 letters'});
+            }
             user.name = req.body.name;
         }
         if(req.body.email){
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(req.body.email)) {
+                return res.status(400).json({ message: 'Please include a valid email address' });
+            }
             user.email = req.body.email;
         }
         if(req.body.password){
-            user.password = req.body.password;
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(req.body.password, salt);
         }
 
         const updatedUser = await user.save();
