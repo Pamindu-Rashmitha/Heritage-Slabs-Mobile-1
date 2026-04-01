@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 
 
 const validate = (req, res, next) => {
@@ -36,16 +36,26 @@ const loginValidation = [
 const productValidation = [
     body('stoneName')
         .notEmpty().withMessage('Stone name is required')
-        .isString().withMessage('Stone name must be a text string'),
+        .isString().withMessage('Stone name must be a text string')
+        .trim()
+        .escape()
+        .isLength({ min: 3, max: 15 }).withMessage('Stone name must be between 3 and 15 characters'),
     body('pricePerSqFt')
-        .isFloat({ min: 0 }).withMessage('Price per square foot must be a non-negative numeric value'),
+        .notEmpty().withMessage('Price per square foot is required')
+        .isFloat({ min: 0.01 }).withMessage('Price per square foot must be a positive numeric value greater than 0'),
     body('stockInSqFt')
+        .notEmpty().withMessage('Stock in square foot is required')
         .isFloat({ min: 0 }).withMessage('Stock in square foot must be a non-negative numeric value')
+];
+
+const idValidation = [
+    param('id').isMongoId().withMessage('Invalid product ID format')
 ];
 
 module.exports = {
     validate,
     registerValidation,
     loginValidation,
-    productValidation
+    productValidation,
+    idValidation
 };

@@ -2,11 +2,7 @@ const Product = require('../models/Product');
 
 const createProduct = async (req, res) => {
     try{
-        const {stoneName, pricePerSqFt, stockInSqFt} = req.body;
-
-        if(!stoneName || !pricePerSqFt || !stockInSqFt){
-            return res.status(400).json({message: 'Please add all required fields'});
-        }
+        const { stoneName, pricePerSqFt, stockInSqFt } = req.body;
 
         const imagePath = req.file ? `/${req.file.path.replace(/\\/g, '/')}` : null;
 
@@ -38,39 +34,57 @@ const getProducts = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        let product = await Product.findById(req.params.id);
 
-        if(!product){
-            return res.status(404).json({message:'Product not found'});
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
         }
 
-        const updatedProduct = await Product.findByIdAndUpdate (
+        // Check for user ownership
+        if (product.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized to update this product' });
+        }
+
+        const { stoneName, pricePerSqFt, stockInSqFt } = req.body;
+
+        const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
-            req.body,
-            {new: true}
+            { stoneName, pricePerSqFt, stockInSqFt },
+            { new: true, runValidators: true }
         );
 
         res.status(200).json(updatedProduct);
-    } catch(error) {
+    } catch (error) {
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid Product ID format' });
+        }
         console.error(error);
-        res.status(500).json({message:'Server Error'})
+        res.status(500).json({ message: 'Server Error' });
     }
 };
 
 const deleteProduct = async (req, res) => {
-    try{
+    try {
         const product = await Product.findById(req.params.id);
 
-        if(!product){
-            return res.status(404).json({message:'Product not found'});
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Check for user ownership
+        if (product.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized to delete this product' });
         }
 
         await product.deleteOne();
-        res.status(200).json({id: req.params.id, message:'Product deleted'});
+        res.status(200).json({ id: req.params.id, message: 'Product deleted' });
 
-    } catch(error){
+    } catch (error) {
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid Product ID format' });
+        }
         console.error(error);
-        res.status(500).json({message:'Server Error'});
+        res.status(500).json({ message: 'Server Error' });
     }
 };
 
