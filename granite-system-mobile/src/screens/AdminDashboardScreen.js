@@ -71,6 +71,15 @@ const SECTIONS = [
         functional: false,
     },
     {
+        key: 'Purchase Orders',
+        title: 'Manage Purchase Orders',
+        subtitle: 'create,view,edit and delete purchase orders',
+        icon: 'cart-arrow-down',
+        color: '#38BDF8',
+        bg: '#fdecea',
+        functional: false,
+    },
+    {
         key: 'reviews',
         title: 'Reviews & Tickets',
         subtitle: 'Customer feedback & support',
