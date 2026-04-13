@@ -13,6 +13,10 @@ import ProductManagementScreen from './src/screens/ProductManagementScreen';
 import EditProductScreen from './src/screens/EditProductScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import UserManagementScreen from './src/screens/UserManagementScreen';
+import CartScreen from './src/screens/CartScreen';
+import OrderHistoryScreen from './src/screens/OrderHistoryScreen';
+import SimulatedPaymentScreen from './src/screens/SimulatedPaymentScreen';
+import AdminOrderScreen from './src/screens/AdminOrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +34,10 @@ export default function App() {
           <Stack.Screen name="CustomerCatalog" component={CustomerCatalogScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
           <Stack.Screen name="UserManagement" component={UserManagementScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Cart" component={CartScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="SimulatedPayment" component={SimulatedPaymentScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AdminOrder" component={AdminOrderScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
