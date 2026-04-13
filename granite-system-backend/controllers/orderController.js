@@ -24,6 +24,19 @@ const normalizeLabel = (value) =>
         .toLowerCase()
         .replace(/\s+/g, ' ');
 
+const computeOrderTotalFromItems = (order) =>
+    (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+
+const ensureOrderTotalAmount = async (orderDoc) => {
+    if (typeof orderDoc.totalAmount === 'number' && Number.isFinite(orderDoc.totalAmount)) {
+        return orderDoc;
+    }
+    const computedTotal = computeOrderTotalFromItems(orderDoc);
+    orderDoc.totalAmount = computedTotal;
+    await orderDoc.save();
+    return orderDoc;
+};
+
 // @desc    Create new order from cart
 // @route   POST /api/orders
 // @access  Private
@@ -102,6 +115,7 @@ const createOrder = async (req, res) => {
 const getMyOrders = async (req, res) => {
     try {
         const orders = await Order.find({ user: req.user.id }).populate('items.product').sort('-createdAt');
+        await Promise.all(orders.map((order) => ensureOrderTotalAmount(order)));
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -117,6 +131,7 @@ const getAllOrders = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized as an admin' });
         }
         const orders = await Order.find({}).populate('user', 'name email').populate('items.product').sort('-createdAt');
+        await Promise.all(orders.map((order) => ensureOrderTotalAmount(order)));
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -231,6 +246,7 @@ const generateInvoice = async (req, res) => {
         if (order.user._id.toString() !== authUser.id && authUser.role !== 'Admin') {
             return res.status(403).json({ message: 'Not authorized to access this invoice' });
         }
+        await ensureOrderTotalAmount(order);
 
         const doc = new PDFDocument({ margin: 50 });
         let filename = `invoice_${order._id}.pdf`;
