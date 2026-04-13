@@ -15,8 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import api from '../api/axiosConfig';
-const SERVER_URL = 'http://192.168.1.8:5000';
+import api, { SERVER_URL } from '../api/axiosConfig';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 
@@ -44,7 +43,7 @@ const NavItem = ({ icon, label, color, onPress }) => (
     </TouchableOpacity>
 );
 
-const BottomNavBar = ({ onLogout, onNavigateProfile }) => (
+const BottomNavBar = ({ onLogout, onNavigateProfile, onNavigateCart, onNavigateOrders }) => (
     <View style={styles.bottomNav}>
 
         <NavItem
@@ -58,14 +57,14 @@ const BottomNavBar = ({ onLogout, onNavigateProfile }) => (
             icon="cart-outline"
             label="Cart"
             color={COLORS.navInactive}
-            onPress={() => { }}
+            onPress={onNavigateCart}
         />
 
         <NavItem
             icon="history"
             label="Orders"
             color={COLORS.navInactive}
-            onPress={() => { }}
+            onPress={onNavigateOrders}
         />
 
         <NavItem
@@ -188,7 +187,7 @@ const CatalogHeader = ({ isSearchActive, setIsSearchActive, searchQuery, setSear
 );
 
 
-const CustomerCatalogScreen = ({ navigation }) => {
+const CustomerCatalogScreen = ({ navigation, route }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -197,7 +196,13 @@ const CustomerCatalogScreen = ({ navigation }) => {
 
     useEffect(() => {
         fetchInventory();
-    }, []);
+        // Handle payment success from navigation params
+        if (route.params?.paymentSuccess) {
+            Alert.alert('Payment Successful', 'Your order has been placed successfully and a confirmation email has been sent.');
+            // Clear the param to avoid showing alert again on refresh
+            navigation.setParams({ paymentSuccess: undefined });
+        }
+    }, [route.params?.paymentSuccess]);
 
     const handleLogout = async () => {
         try {
@@ -206,6 +211,16 @@ const CustomerCatalogScreen = ({ navigation }) => {
             navigation.replace('Login');
         } catch (error) {
             console.error('Error logging out:', error);
+        }
+    };
+
+    const handleAddToCart = async (product) => {
+        try {
+            await api.post('/cart', { productId: product._id, quantity: 1 });
+            Alert.alert('Success', `${product.stoneName} added to cart!`);
+        } catch (error) {
+            console.error('Add to cart error:', error);
+            Alert.alert('Error', 'Failed to add item to cart');
         }
     };
 
@@ -262,7 +277,48 @@ const CustomerCatalogScreen = ({ navigation }) => {
             <FlatList
                 data={filteredProducts}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <SlabCard item={item} />}
+                renderItem={({ item }) => (
+                    <View style={styles.card}>
+                        <Image
+                            source={{ uri: item.imageUrl ? `${SERVER_URL}${item.imageUrl}` : 'https://via.placeholder.com/800x600?text=No+Image' }}
+                            style={styles.slabImage}
+                            resizeMode="cover"
+                        />
+                        <View style={styles.categoryTag}>
+                            <Text style={styles.categoryTagText}>Granite Slab</Text>
+                        </View>
+                        <View style={styles.cardContent}>
+                            <Text style={styles.stoneName} numberOfLines={1}>{item.stoneName}</Text>
+                            <View style={styles.metaRow}>
+                                <View style={styles.metaChip}>
+                                    <MaterialCommunityIcons name="layers-outline" size={13} color={COLORS.textSub} />
+                                    <Text style={styles.metaChipText}>{item.stockInSqFt} SqFt</Text>
+                                </View>
+                                <View style={styles.priceBadge}>
+                                    <Text style={styles.priceText}>LKR {item.pricePerSqFt}<Text style={styles.priceSub}>/SqFt</Text></Text>
+                                </View>
+                            </View>
+                            <View style={styles.cardActions}>
+                                <TouchableOpacity
+                                    style={styles.addCartBtn}
+                                    onPress={() => handleAddToCart(item)}
+                                    activeOpacity={0.85}
+                                >
+                                    <MaterialCommunityIcons name="cart-plus" size={16} color={COLORS.white} />
+                                    <Text style={styles.addCartText}>Add to Cart</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.reviewBtn}
+                                    onPress={() => { }}
+                                    activeOpacity={0.85}
+                                >
+                                    <MaterialCommunityIcons name="star-outline" size={16} color={COLORS.teal} />
+                                    <Text style={styles.reviewText}>Review</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )}
                 contentContainerStyle={styles.listContent}
                 refreshing={refreshing}
                 onRefresh={() => fetchInventory(true)}
@@ -278,6 +334,8 @@ const CustomerCatalogScreen = ({ navigation }) => {
             <BottomNavBar
                 onLogout={handleLogout}
                 onNavigateProfile={() => navigation.navigate('Profile')}
+                onNavigateCart={() => navigation.navigate('Cart')}
+                onNavigateOrders={() => navigation.navigate('OrderHistory')}
             />
         </SafeAreaView>
     );

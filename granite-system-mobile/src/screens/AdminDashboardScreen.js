@@ -41,7 +41,8 @@ const SECTIONS = [
         icon: 'clipboard-list-outline',
         color: '#4361ee',
         bg: '#eaedfc',
-        functional: false,
+        functional: true,
+        route: 'AdminOrder',
     },
     {
         key: 'deliveries',
