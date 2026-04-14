@@ -19,3 +19,4 @@ granite-system-backend/uploads/
 # OS generated files
 .DS_Store
 Thumbs.db
+granite-system-backend/package-lock.json
