@@ -1,0 +1,11 @@
+# backend
+cd granite-system-backend
+npm run dev
+
+# frontend
+cd granite-system-mobile
+npm start
+npx expo start --web
+
+Customer	customer@test.com	Test@1234
+Admin	admin@test.com	Admin@1234

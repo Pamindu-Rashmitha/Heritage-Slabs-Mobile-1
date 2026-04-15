@@ -87,7 +87,8 @@ const SECTIONS = [
         icon: 'face-agent',
         color: '#e9c46a',
         bg: '#fdf8e8',
-        functional: false,
+        functional: true,
+        route: 'AdminReviewFeedback',
     },
     {
         key: 'users',
@@ -144,11 +145,11 @@ const AdminDashboardScreen = ({ navigation }) => {
     };
 
     const handleSectionPress = (section) => {
-        if (section.functional && section.route) {
-            navigation.navigate(section.route);
-        } else {
+        if (!section.functional) {
             Alert.alert(section.title, 'This module is coming soon.', [{ text: 'OK' }]);
+            return;
         }
+        navigation.navigate(section.route);
     };
 
     return (

@@ -158,6 +158,23 @@ const OrderHistoryScreen = ({ navigation }) => {
                                         <Text style={styles.invoiceBtnText}>Invoice</Text>
                                     </TouchableOpacity>
                                 )}
+                                {['Paid', 'Shipped', 'Delivered'].includes(item.status) && (
+                                    item.items.map((orderItem, idx) =>
+                                        orderItem.product ? (
+                                            <TouchableOpacity
+                                                key={idx}
+                                                style={styles.reviewBtn}
+                                                onPress={() => navigation.navigate('WriteReview', {
+                                                    productId: orderItem.product._id,
+                                                    productName: orderItem.product.stoneName,
+                                                })}
+                                            >
+                                                <MaterialCommunityIcons name="star-outline" size={16} color={COLORS.teal} />
+                                                <Text style={styles.reviewBtnText}>Review</Text>
+                                            </TouchableOpacity>
+                                        ) : null
+                                    )
+                                )}
                             </View>
                         </View>
                     </View>
@@ -213,6 +230,8 @@ const styles = StyleSheet.create({
     deleteBtn: { padding: 8 },
     invoiceBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, padding: 8, borderWidth: 1, borderColor: COLORS.teal, borderRadius: 8 },
     invoiceBtnText: { color: COLORS.teal, fontWeight: '700', fontSize: 13 },
+    reviewBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: COLORS.teal, borderRadius: 8, backgroundColor: '#e8f5f4' },
+    reviewBtnText: { color: COLORS.teal, fontWeight: '700', fontSize: 13 },
     centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 },
     emptyText: { marginTop: 12, color: COLORS.textSub, fontSize: 16 }

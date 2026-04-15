@@ -43,7 +43,7 @@ const NavItem = ({ icon, label, color, onPress }) => (
     </TouchableOpacity>
 );
 
-const BottomNavBar = ({ onLogout, onNavigateProfile, onNavigateCart, onNavigateOrders }) => (
+const BottomNavBar = ({ onLogout, onNavigateProfile, onNavigateCart, onNavigateOrders, onNavigateSupport }) => (
     <View style={styles.bottomNav}>
 
         <NavItem
@@ -71,7 +71,7 @@ const BottomNavBar = ({ onLogout, onNavigateProfile, onNavigateCart, onNavigateO
             icon="message-outline"
             label="Support"
             color={COLORS.navInactive}
-            onPress={() => { }}
+            onPress={onNavigateSupport}
         />
 
         <NavItem
@@ -309,11 +309,14 @@ const CustomerCatalogScreen = ({ navigation, route }) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.reviewBtn}
-                                    onPress={() => { }}
+                                    onPress={() => navigation.navigate('ProductReviews', {
+                                        productId: item._id,
+                                        productName: item.stoneName,
+                                    })}
                                     activeOpacity={0.85}
                                 >
                                     <MaterialCommunityIcons name="star-outline" size={16} color={COLORS.teal} />
-                                    <Text style={styles.reviewText}>Review</Text>
+                                    <Text style={styles.reviewText}>Reviews</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -336,6 +339,7 @@ const CustomerCatalogScreen = ({ navigation, route }) => {
                 onNavigateProfile={() => navigation.navigate('Profile')}
                 onNavigateCart={() => navigation.navigate('Cart')}
                 onNavigateOrders={() => navigation.navigate('OrderHistory')}
+                onNavigateSupport={() => navigation.navigate('Feedback')}
             />
         </SafeAreaView>
     );

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "expo-web",
+      "runtimeExecutable": "wsl.exe",
+      "runtimeArgs": ["-e", "bash", "-c", "cd /mnt/c/Users/aloka/Mine/Projects/Heritage-Slabs-Mobile/Heritage-Slabs-Mobile-1/granite-system-mobile && npx expo start --web --port 8081"],
+      "port": 8081
+    }
+  ]
+}

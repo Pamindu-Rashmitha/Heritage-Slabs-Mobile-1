@@ -17,6 +17,12 @@ import CartScreen from './src/screens/CartScreen';
 import OrderHistoryScreen from './src/screens/OrderHistoryScreen';
 import SimulatedPaymentScreen from './src/screens/SimulatedPaymentScreen';
 import AdminOrderScreen from './src/screens/AdminOrderScreen';
+import WriteReviewScreen from './src/screens/WriteReviewScreen';
+import ProductReviewsScreen from './src/screens/ProductReviewsScreen';
+import AdminReviewScreen from './src/screens/AdminReviewScreen';
+import FeedbackScreen from './src/screens/FeedbackScreen';
+import AdminFeedbackScreen from './src/screens/AdminFeedbackScreen';
+import AdminReviewFeedbackScreen from './src/screens/AdminReviewFeedbackScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +44,12 @@ export default function App() {
           <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SimulatedPayment" component={SimulatedPaymentScreen} options={{ headerShown: false }} />
           <Stack.Screen name="AdminOrder" component={AdminOrderScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="WriteReview" component={WriteReviewScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="ProductReviews" component={ProductReviewsScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AdminReview" component={AdminReviewScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AdminFeedback" component={AdminFeedbackScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AdminReviewFeedback" component={AdminReviewFeedbackScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
