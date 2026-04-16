@@ -25,7 +25,7 @@ const LoginScreen = ({navigation}) => {
         try {
             // Send the POST request to /auth/login
             const response = await api.post('/auth/login', {
-                email: email,
+                email: email.trim().toLowerCase(),
                 password: password,
             });
 
