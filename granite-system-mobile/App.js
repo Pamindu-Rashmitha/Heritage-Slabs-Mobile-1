@@ -17,6 +17,9 @@ import CartScreen from './src/screens/CartScreen';
 import OrderHistoryScreen from './src/screens/OrderHistoryScreen';
 import SimulatedPaymentScreen from './src/screens/SimulatedPaymentScreen';
 import AdminOrderScreen from './src/screens/AdminOrderScreen';
+import PurchaseOrderListScreen from './src/screens/PurchaseOrderListScreen';
+import AddPurchaseOrderScreen from './src/screens/AddPurchaseOrderScreen';
+import EditPurchaseOrderScreen from './src/screens/EditPurchaseOrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +41,9 @@ export default function App() {
           <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SimulatedPayment" component={SimulatedPaymentScreen} options={{ headerShown: false }} />
           <Stack.Screen name="AdminOrder" component={AdminOrderScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="PurchaseOrderList" component={PurchaseOrderListScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AddPurchaseOrder" component={AddPurchaseOrderScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="EditPurchaseOrder" component={EditPurchaseOrderScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
