@@ -69,7 +69,8 @@ const SECTIONS = [
         icon: 'factory',
         color: '#e76f51',
         bg: '#fdecea',
-        functional: false,
+        functional: true,
+        route: 'SupplierManagement',
     },
     {
         key: 'Purchase Orders',
