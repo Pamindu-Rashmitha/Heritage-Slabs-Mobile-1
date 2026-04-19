@@ -51,7 +51,8 @@ const SECTIONS = [
         icon: 'truck-delivery-outline',
         color: '#f4a261',
         bg: '#fdf3ea',
-        functional: false,
+        functional: true,
+        route: 'DeliveryManagement',
     },
     {
         key: 'vehicles',
@@ -60,7 +61,8 @@ const SECTIONS = [
         icon: 'car-outline',
         color: '#7b2d8b',
         bg: '#f3e8f8',
-        functional: false,
+        functional: true,
+        route: 'VehicleManagement',
     },
     {
         key: 'suppliers',
