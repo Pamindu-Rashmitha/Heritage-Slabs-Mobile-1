@@ -22,6 +22,9 @@ import AddPurchaseOrderScreen from './src/screens/AddPurchaseOrderScreen';
 import EditPurchaseOrderScreen from './src/screens/EditPurchaseOrderScreen';
 import SupplierManagementScreen from './src/screens/SupplierManagementScreen';
 
+import VehicleManagementScreen from './src/screens/VehicleManagementScreen';
+import DeliveryManagementScreen from './src/screens/DeliveryManagementScreen';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -46,6 +49,10 @@ export default function App() {
           <Stack.Screen name="AddPurchaseOrder" component={AddPurchaseOrderScreen} options={{ headerShown: false }} />
           <Stack.Screen name="EditPurchaseOrder" component={EditPurchaseOrderScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SupplierManagement" component={SupplierManagementScreen} options={{ headerShown: false }} />
+
+          <Stack.Screen name="VehicleManagement" component={VehicleManagementScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="DeliveryManagement" component={DeliveryManagementScreen} options={{ headerShown: false }} />
+
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
